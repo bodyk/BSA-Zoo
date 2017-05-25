@@ -78,5 +78,10 @@ namespace Zoo
             if (Health + 1 <= MaxHealth)
                 ++Health;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0, -10}{1, -20}{2, -10}{3, -10}", this.GetType().Name, Alias, Health, StateOfAnimal);
+        }
     }
 }

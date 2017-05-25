@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Zoo
 {
@@ -7,7 +8,6 @@ namespace Zoo
         static void Main(string[] args)
         {
             ZooManager manager = new ZooManager();
-
             manager.OpenZoo();
         }
     }
