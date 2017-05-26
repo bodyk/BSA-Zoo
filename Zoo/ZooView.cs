@@ -240,12 +240,12 @@ namespace Zoo
 
         private (Animal, Animal) GetStrongestAndWeakest()
         {
-            return (ZooAnimals
-                .OrderBy(a => a.Health)
-                .FirstOrDefault(),
-                ZooAnimals
-                .OrderBy(a => a.Health)
-                .LastOrDefault());
+            return ZooAnimals
+                .Aggregate((minA : ZooAnimals[0], maxA : ZooAnimals[0]), 
+                (acc, elem) => 
+                    (acc.minA = acc.minA.Health > elem.Health && elem.StateOfAnimal != Animal.State.DEAD ? elem : acc.minA,
+                        acc.maxA = acc.maxA.Health < elem.Health && elem.StateOfAnimal != Animal.State.DEAD ? elem : acc.maxA
+                    ));
         }
         #endregion
 

@@ -56,9 +56,8 @@ namespace Zoo
 
         public void OpenZoo()
         {
-            ViewConsole.ShowMainHelp();
-            /*AllAnimals = ViewConsole.GetOriginAnimals();
-            ProccessZooLife();*/
+            AllAnimals = ViewConsole.GetOriginAnimals();
+            ProccessZooLife();
         }
 
         private void ProccessZooLife()
@@ -75,7 +74,8 @@ namespace Zoo
                 string s = Console.ReadLine();
                 if (s == "s")
                 {
-                    q.ShowAnimalsGroupByType();
+                    ViewConsole.ShowStrongestAndWeakest();
+                    /*q.ShowAnimalsGroupByType();
                     q.ShowAnimalsWithState(Animal.State.SATED);
                     q.ShowSickTigers();
                     q.ShowAnimalByAlias("bee");
@@ -84,7 +84,7 @@ namespace Zoo
                     q.ShowCountDeadGroupByType();
                     q.ShowWolvesAndBearsByHealthMore3();
                     q.ShowStrongestAndWeakest();
-                    q.ShowAverageHealth();
+                    q.ShowAverageHealth();*/
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace Zoo
             lifeAction.Execute();
 
             //ViewConsole.ClearScreen();
-            //ViewConsole.ShowAnimals(AllAnimals);
+            ViewConsole.ShowAnimals();
             if (AllAnimals.Count(a => a.StateOfAnimal == Animal.State.DEAD) == AllAnimals.Count)
             {
                 _timer.Stop();
