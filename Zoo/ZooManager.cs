@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using System.Threading;
+using System.Timers;
 
 namespace Zoo
 {
     class ZooManager
     {
         public ZooAction ZooAction { get; set; }
-        public List<Animal> LiveAnimals { get; set; }
-        public List<Animal> DeadAnimals { get; set; }
+        public List<Animal> AllAnimals { get; set; }
         public ZooView ViewConsole { get; set; }
         public readonly List<Type> AnimalCreatorTypes;
+        private Timer _timer;
 
         private List<AnimalCreator> _creators;
 
@@ -20,8 +20,7 @@ namespace Zoo
 
         public ZooManager()
         {
-            LiveAnimals = new List<Animal>();
-            DeadAnimals = new List<Animal>();
+            AllAnimals = new List<Animal>();
             AnimalCreatorTypes = new List<Type>()
             {
                 typeof(BearCreator),
@@ -32,7 +31,7 @@ namespace Zoo
                 typeof(WolfCreator)
             };
 
-            ViewConsole = new ZooView(LiveAnimals, AnimalCreatorTypes);
+            ViewConsole = new ZooView(AllAnimals, AnimalCreatorTypes);
 
             _creators = new List<AnimalCreator>()
             {
@@ -57,44 +56,53 @@ namespace Zoo
 
         public void OpenZoo()
         {
-            LiveAnimals = ViewConsole.GetOriginAnimals();
-
-            ProccessZooLife();
+            ViewConsole.ShowMainHelp();
+            /*AllAnimals = ViewConsole.GetOriginAnimals();
+            ProccessZooLife();*/
         }
 
         private void ProccessZooLife()
         {
-            var autoEvent = new AutoResetEvent(false);
-            Timer t = new Timer(ZooLoopCallback, autoEvent, 0, 5000);
-            autoEvent.WaitOne();
-            t.Dispose();
-            ViewConsole.ShowGameOver();
+            _timer = new System.Timers.Timer(5000);
+            // Hook up the Elapsed event for the timer. 
+            _timer.Elapsed += ZooLoopCallback;
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
+            _timer.Start();
+            AdvancedAnimalQuery q = new AdvancedAnimalQuery(AllAnimals);
+            while(_timer.Enabled)
+            {
+                string s = Console.ReadLine();
+                if (s == "s")
+                {
+                    q.ShowAnimalsGroupByType();
+                    q.ShowAnimalsWithState(Animal.State.SATED);
+                    q.ShowSickTigers();
+                    q.ShowAnimalByAlias("bee");
+                    q.ShowHungryAliases();
+                    q.ShowStrongestAnimalInType();
+                    q.ShowCountDeadGroupByType();
+                    q.ShowWolvesAndBearsByHealthMore3();
+                    q.ShowStrongestAndWeakest();
+                    q.ShowAverageHealth();
+                }
+            }
         }
 
-        private void ZooLoopCallback(object stateInfo)
+        private void ZooLoopCallback(object sender, ElapsedEventArgs e)
         {
-            AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
-
-            
-            Animal randomAnimal = LiveAnimals[_random.Next(LiveAnimals.Count)];
+            var liveAnimals = AllAnimals.Where(a => a.StateOfAnimal != Animal.State.DEAD).ToList();
+            Animal randomAnimal = liveAnimals[_random.Next(liveAnimals.Count)];
 
             LifeTickAnimalAction lifeAction = new LifeTickAnimalAction(randomAnimal);
             lifeAction.Execute();
 
-            if (randomAnimal.StateOfAnimal == Animal.State.DEAD)
+            //ViewConsole.ClearScreen();
+            //ViewConsole.ShowAnimals(AllAnimals);
+            if (AllAnimals.Count(a => a.StateOfAnimal == Animal.State.DEAD) == AllAnimals.Count)
             {
-                DeadAnimals.Add(randomAnimal);
-                LiveAnimals.Remove(randomAnimal);
+                _timer.Stop();
             }
-            
-            ViewConsole.ClearScreen();
-            ViewConsole.ShowAnimals(LiveAnimals, DeadAnimals);
-
-            if (LiveAnimals.Count == 0)
-            {
-                autoEvent.Set();
-            }
-
         }
     }
 }
