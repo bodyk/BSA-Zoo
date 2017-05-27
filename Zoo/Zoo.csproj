@@ -61,7 +61,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\AddAnimalAction.cs" />
-    <Compile Include="AdvancedAnimalQuery.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\BaseQuery.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\ElephantByAlias.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\AnimalsGroupByType.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\AnimalsWithState.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\AverageHealth.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\CountDeadGroupByType.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\HungryAliases.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\SickTigers.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\StrongestAndWeakest.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\StrongestAnimalInType.cs" />
+    <Compile Include="AdvancedQuery%28Task3%29\WolvesAndBearsByHealthMore3.cs" />
     <Compile Include="Animals\Animal.cs" />
     <Compile Include="Actions\AnimalAction.cs" />
     <Compile Include="AnimalCreators\AnimalCreator.cs" />
@@ -104,8 +114,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AdvancedQuery\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

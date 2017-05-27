@@ -63,28 +63,27 @@ namespace Zoo
         private void ProccessZooLife()
         {
             _timer = new System.Timers.Timer(5000);
+            
+            ViewConsole.ShowQueriesHelp();
             // Hook up the Elapsed event for the timer. 
             _timer.Elapsed += ZooLoopCallback;
             _timer.AutoReset = true;
             _timer.Enabled = true;
             _timer.Start();
-            AdvancedAnimalQuery q = new AdvancedAnimalQuery(AllAnimals);
             while(_timer.Enabled)
             {
                 string s = Console.ReadLine();
-                if (s == "s")
+                if (s.ToLower() == ViewConsole.InputToHelp)
                 {
-                    ViewConsole.ShowStrongestAndWeakest();
-                    /*q.ShowAnimalsGroupByType();
-                    q.ShowAnimalsWithState(Animal.State.SATED);
-                    q.ShowSickTigers();
-                    q.ShowAnimalByAlias("bee");
-                    q.ShowHungryAliases();
-                    q.ShowStrongestAnimalInType();
-                    q.ShowCountDeadGroupByType();
-                    q.ShowWolvesAndBearsByHealthMore3();
-                    q.ShowStrongestAndWeakest();
-                    q.ShowAverageHealth();*/
+                    ViewConsole.ShowQueriesHelp();
+                }
+                else if (s.ToLower() == ViewConsole.InputToShowAnimals)
+                {
+                    ViewConsole.ShowAnimals();
+                }
+                else
+                {
+                    ViewConsole.ShowQuery(s);
                 }
             }
         }
@@ -97,8 +96,6 @@ namespace Zoo
             LifeTickAnimalAction lifeAction = new LifeTickAnimalAction(randomAnimal);
             lifeAction.Execute();
 
-            //ViewConsole.ClearScreen();
-            ViewConsole.ShowAnimals();
             if (AllAnimals.Count(a => a.StateOfAnimal == Animal.State.DEAD) == AllAnimals.Count)
             {
                 _timer.Stop();
